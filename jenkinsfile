@@ -15,7 +15,7 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                sh './mvnw clean package'
+                sh 'mvn clean package'
             }
         }
         stage('Build Docker Image'){
