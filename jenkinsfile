@@ -1,5 +1,9 @@
 pipeline {
     agent any
+ envirnonment{
+    IMAGE_NAME = "my-spring-petclinic"
+    IMAGE_TAG = "1.0"
+ }
 
     stages {
         stage('Checkout') {
@@ -9,25 +13,38 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Application') {
             steps {
                 sh './mvnw clean package'
+            }
+        }
+        stage('Build Docker Image'){
+            steps{
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                echo "${IMAGE_NAME}"
+            }
+        }
+        stage('Run Container'){
+            steps{
+                sh '''
+                 docker stop spring-petclinic || true
+                docker rm spring-petclinic || true
+                docker run -d \
+                  --name spring-petclinic \
+                  -p 8080:8080 \
+                  ${IMAGE_NAME}:${IMAGE_TAG}
+                '''
             }
         }
     }
 
     post {
         success {
-            junit '**/target/surefire-reports/TEST-*.xml'
-            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            echo 'Application built and deployed successfully.'
         }
 
         failure {
-            echo 'Build Failed!'
-        }
-
-        always {
-            echo 'Pipeline execution completed.'
+            echo 'Pipeline failed.'
         }
     }
 }
