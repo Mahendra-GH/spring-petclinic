@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    envirnonment{
+    environment {
         IMAGE_NAME = "my-spring-petclinic"
         IMAGE_TAG = "1.0"
     }
