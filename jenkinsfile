@@ -1,9 +1,9 @@
 pipeline {
     agent any
- envirnonment{
-    IMAGE_NAME = "my-spring-petclinic"
-    IMAGE_TAG = "1.0"
- }
+    envirnonment{
+        IMAGE_NAME = "my-spring-petclinic"
+        IMAGE_TAG = "1.0"
+    }
 
     stages {
         stage('Checkout') {
