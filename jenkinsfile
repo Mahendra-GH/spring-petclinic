@@ -31,7 +31,7 @@ pipeline {
                 docker rm spring-petclinic || true
                 docker run -d \
                   --name spring-petclinic \
-                  -p 8080:80 \
+                  -p 9090:8080 \
                   ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
             }
